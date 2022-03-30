@@ -23,10 +23,8 @@ namespace TheatricalPlayersRefactoringKata
                 performanceInfo += string.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", play.Name, Convert.ToDecimal(thisAmount / 100), perf.Audience);
                 totalAmount += thisAmount;
             }
-            return $@"
-Statement for {invoice.Customer}
-{performanceInfo}
-Amount owed is {Convert.ToDecimal(totalAmount / 100, cultureInfo):C}
+            return $@"Statement for {invoice.Customer}
+{performanceInfo}Amount owed is {Convert.ToDecimal(totalAmount / 100, cultureInfo):C}
 You earned {volumeCredits} credits
 ";
             

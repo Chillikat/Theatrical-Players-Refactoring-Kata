@@ -44,7 +44,7 @@ You earned {volumeCredits} credits
                 var thisAmount = CalculateAmount(play, perf);
 
                 // print line for this order
-                performanceInfo += string.Format(cultureInfo, "  <tr><td>{0}</td><td>{0}</td><td>{2}</td></tr>\n", play.Name, Convert.ToDecimal(thisAmount / 100), perf.Audience);
+                performanceInfo += string.Format(cultureInfo, "  <tr><td>{0}</td><td>{2}</td><td>{1:C}</td></tr>\n", play.Name, Convert.ToDecimal(thisAmount / 100), perf.Audience);
                 totalAmount += thisAmount;
             }
 
@@ -53,9 +53,8 @@ You earned {volumeCredits} credits
   <h1>Statement for {invoice.Customer}</h1>
   <table>
     <tr><th>play</th><th>seats</th><th>cost</th></tr>
-    {performanceInfo}
-  </table>
-  <p>Amount owed is <em>{Convert.ToDecimal(totalAmount / 100, cultureInfo):C}</em></p>
+    {performanceInfo}</table>
+  <p>Amount owed is <em>{string.Format(cultureInfo, "{0:C}", Convert.ToDecimal(totalAmount / 100))}</em></p>
   <p>You earned <em>{volumeCredits}</em> credits</p>
 </html>";
         }

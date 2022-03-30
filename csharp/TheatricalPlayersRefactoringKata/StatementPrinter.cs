@@ -10,7 +10,7 @@ namespace TheatricalPlayersRefactoringKata
         {
             var totalAmount = 0;
             var volumeCredits = 0;
-            var result = string.Format("Statement for {0}\n", invoice.Customer);
+            var performanceInfo = "";
             CultureInfo cultureInfo = new CultureInfo("en-US");
 
             foreach(var perf in invoice.Performances) 
@@ -20,12 +20,16 @@ namespace TheatricalPlayersRefactoringKata
                 volumeCredits = CalculateVolumeCredits(volumeCredits, perf, play);
 
                 // print line for this order
-                result += string.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", play.Name, Convert.ToDecimal(thisAmount / 100), perf.Audience);
+                performanceInfo += string.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", play.Name, Convert.ToDecimal(thisAmount / 100), perf.Audience);
                 totalAmount += thisAmount;
             }
-            result += string.Format(cultureInfo, "Amount owed is {0:C}\n", Convert.ToDecimal(totalAmount / 100));
-            result += string.Format("You earned {0} credits\n", volumeCredits);
-            return result;
+            return $@"
+Statement for {invoice.Customer}
+{performanceInfo}
+Amount owed is {Convert.ToDecimal(totalAmount / 100, cultureInfo):C}
+You earned {volumeCredits} credits
+";
+            
         }
 
         private int CalculateVolumeCredits(int volumeCredits, Performance perf, Play play)

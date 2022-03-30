@@ -17,10 +17,7 @@ namespace TheatricalPlayersRefactoringKata
             {
                 var play = plays[perf.PlayID];
                 var thisAmount = CalculateAmount(play, perf);
-                // add volume credits
-                volumeCredits += Math.Max(perf.Audience - 30, 0);
-                // add extra credit for every ten comedy attendees
-                if ("comedy" == play.Type) volumeCredits += (int)Math.Floor((decimal)perf.Audience / 5);
+                volumeCredits = CalculateVolumeCredits(volumeCredits, perf, play);
 
                 // print line for this order
                 result += string.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", play.Name, Convert.ToDecimal(thisAmount / 100), perf.Audience);
@@ -31,7 +28,16 @@ namespace TheatricalPlayersRefactoringKata
             return result;
         }
 
-        private static int CalculateAmount(Play play, Performance perf)
+        private int CalculateVolumeCredits(int volumeCredits, Performance perf, Play play)
+        {
+            // add volume credits
+            volumeCredits += Math.Max(perf.Audience - 30, 0);
+            // add extra credit for every ten comedy attendees
+            if ("comedy" == play.Type) volumeCredits += (int) Math.Floor((decimal) perf.Audience / 5);
+            return volumeCredits;
+        }
+
+        private int CalculateAmount(Play play, Performance perf)
         {
             var thisAmount = 0;
             switch (play.Type)

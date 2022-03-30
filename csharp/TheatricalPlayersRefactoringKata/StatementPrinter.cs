@@ -43,24 +43,38 @@ namespace TheatricalPlayersRefactoringKata
             switch (play.Type)
             {
                 case "tragedy":
-                    thisAmount = 40000;
-                    if (perf.Audience > 30)
-                    {
-                        thisAmount += 1000 * (perf.Audience - 30);
-                    }
-
+                    thisAmount = CalculateTragedyAmount(perf);
                     break;
                 case "comedy":
-                    thisAmount = 30000;
-                    if (perf.Audience > 20)
-                    {
-                        thisAmount += 10000 + 500 * (perf.Audience - 20);
-                    }
-
-                    thisAmount += 300 * perf.Audience;
+                    thisAmount = CalculateComedyAmount(perf);
                     break;
                 default:
                     throw new Exception("unknown type: " + play.Type);
+            }
+
+            return thisAmount;
+        }
+
+        private int CalculateComedyAmount(Performance perf)
+        {
+            int thisAmount;
+            thisAmount = 30000;
+            if (perf.Audience > 20)
+            {
+                thisAmount += 10000 + 500 * (perf.Audience - 20);
+            }
+
+            thisAmount += 300 * perf.Audience;
+            return thisAmount;
+        }
+
+        private int CalculateTragedyAmount(Performance perf)
+        {
+            int thisAmount;
+            thisAmount = 40000;
+            if (perf.Audience > 30)
+            {
+                thisAmount += 1000 * (perf.Audience - 30);
             }
 
             return thisAmount;

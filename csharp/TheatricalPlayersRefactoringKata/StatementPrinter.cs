@@ -32,9 +32,40 @@ You earned {volumeCredits} credits
             
         }
 
+        public string PrintAsHtml(Invoice invoice, Dictionary<string, Play> plays)
+        {
+            var totalAmount = 0;
+            var performanceInfo = "";
+            CultureInfo cultureInfo = new CultureInfo("en-US");
+
+            foreach(var perf in invoice.Performances) 
+            {
+                var play = plays[perf.PlayID];
+                var thisAmount = CalculateAmount(play, perf);
+
+                // print line for this order
+                performanceInfo += string.Format(cultureInfo, "  <tr><td>{0}</td><td>{0}</td><td>{2}</td></tr>\n", play.Name, Convert.ToDecimal(thisAmount / 100), perf.Audience);
+                totalAmount += thisAmount;
+            }
+
+            var volumeCredits = SumVolumeCredits(invoice.Performances, plays);
+            return $@"<html>
+  <h1>Statement for {invoice.Customer}</h1>
+  <table>
+    <tr><th>play</th><th>seats</th><th>cost</th></tr>
+    {performanceInfo}
+  </table>
+  <p>Amount owed is <em>{Convert.ToDecimal(totalAmount / 100, cultureInfo):C}</em></p>
+  <p>You earned <em>{volumeCredits}</em> credits</p>
+</html>";
+        }
+
         private int SumVolumeCredits(List<Performance> performances, Dictionary<string, Play> plays)
         {
-            return performances.Aggregate(0, (current, perf) => current + CalculateVolumeCredits(current, perf, plays[perf.PlayID]));
+            int result = 0;
+            foreach (var performance in performances) 
+                result = result + CalculateVolumeCredits(result, performance, plays[performance.PlayID]);
+            return result;
         }
 
         private int CalculateVolumeCredits(int volumeCredits, Performance perf, Play play)
